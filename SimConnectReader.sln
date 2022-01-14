@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32002.261
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimConnectReader", "SimConnectReader\SimConnectReader.csproj", "{9ADCDEAE-AAAE-4A07-8AAC-BB4738F9BC47}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimConnectReader.SimConnectFSX", "SimConnectReader.SimConnectFSX\SimConnectReader.SimConnectFSX.csproj", "{B5E1A7BB-423B-4D86-983C-B542016EDE8D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F2C90187-5BFA-4C64-9D7B-E8CE8128F2C9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9ADCDEAE-AAAE-4A07-8AAC-BB4738F9BC47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ADCDEAE-AAAE-4A07-8AAC-BB4738F9BC47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ADCDEAE-AAAE-4A07-8AAC-BB4738F9BC47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ADCDEAE-AAAE-4A07-8AAC-BB4738F9BC47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5E1A7BB-423B-4D86-983C-B542016EDE8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5E1A7BB-423B-4D86-983C-B542016EDE8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5E1A7BB-423B-4D86-983C-B542016EDE8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5E1A7BB-423B-4D86-983C-B542016EDE8D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FCD446B8-7A74-4E23-B9FF-3D39C567CA6C}
+	EndGlobalSection
+EndGlobal
