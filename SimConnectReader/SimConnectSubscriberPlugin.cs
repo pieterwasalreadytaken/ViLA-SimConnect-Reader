@@ -18,6 +18,7 @@ namespace ViLA.Extensions.SimConnectReader
         private ILogger logger;
         private SimConnectFlightConnector flightConnector;
         private ThrottlingLogic throttlingLogic;
+        private PluginConfiguration pluginConfig;
         private int previous = 0;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -27,7 +28,6 @@ namespace ViLA.Extensions.SimConnectReader
             flightConnector = new SimConnectFlightConnector(LoggerFactory.CreateLogger<SimConnectFlightConnector>());
             throttlingLogic = new ThrottlingLogic(LoggerFactory.CreateLogger<ThrottlingLogic>());
 
-            PluginConfiguration pluginConfig;
             try
             {
                 pluginConfig = await GetConfiguration();
@@ -41,14 +41,23 @@ namespace ViLA.Extensions.SimConnectReader
 
             logger.LogInformation("Starting SimConnect listener...");
             flightConnector.Initialize();
-            flightConnector.AircraftStatusUpdated += FlightConnector_AircraftStatusUpdated;
             flightConnector.GenericValuesUpdated += FlightConnector_GenericValuesUpdated;
 
-            flightConnector.RegisterSimValue((TOGGLE_VALUE.ELECTRICAL_MASTER_BATTERY, null));
+            RegisterConfiguredValues();
 
             return true;
         }
 
+        private void RegisterConfiguredValues()
+        {
+            if (pluginConfig == null || pluginConfig.ToggleValues == null)
+                return;
+
+            foreach(TOGGLE_VALUE value in pluginConfig.ToggleValues)
+            {
+                flightConnector.RegisterSimValue(value);
+            }
+        }
 
         public override async Task Stop()
         {
@@ -57,23 +66,11 @@ namespace ViLA.Extensions.SimConnectReader
 
         private void FlightConnector_GenericValuesUpdated(object? sender, ToggleValueUpdatedEventArgs e)
         {
-            foreach (KeyValuePair <(TOGGLE_VALUE variables, string unit), double> entry in e.GenericValueStatus)
+            foreach (KeyValuePair <TOGGLE_VALUE, double> entry in e.GenericValueStatus)
             {
-                var name = entry.Key.variables.ToString();
+                var name = entry.Key.ToSimConnectString();
                 var value = (int)entry.Value;
-                logger.LogInformation("Name: " + name + " Value: " + value.ToString());
-                SendData(name, value);
-            }
-        }
-
-        private void FlightConnector_AircraftStatusUpdated(object? sender, AircraftStatusUpdatedEventArgs e)
-        {
-            int result = e.AircraftStatus.IsAvMasterOn ? 1 : 0;
-
-            if (result != previous)
-            {
-                SendData("AVIONICS_MASTER", result);
-                previous = result;
+                Send(name, value);
             }
         }
 

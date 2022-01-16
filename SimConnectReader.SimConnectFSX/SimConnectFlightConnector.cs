@@ -219,7 +219,6 @@ namespace SimConnectReader.SimConnectFSX
 
                         if (flightStatus.HasValue)
                         {
-                            logger.LogTrace("Get Aircraft status");
                             AircraftStatusUpdated?.Invoke(this, new AircraftStatusUpdatedEventArgs(
                                 new AircraftStatus
                                 {
