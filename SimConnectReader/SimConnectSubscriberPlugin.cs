@@ -49,6 +49,12 @@ namespace ViLA.Extensions.SimConnectReader
             return true;
         }
 
+
+        public override async Task Stop()
+        {
+
+        }
+
         private void FlightConnector_GenericValuesUpdated(object? sender, ToggleValueUpdatedEventArgs e)
         {
             foreach (KeyValuePair <(TOGGLE_VALUE variables, string unit), double> entry in e.GenericValueStatus)
