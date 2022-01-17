@@ -19,7 +19,7 @@ namespace ViLA.Extensions.SimConnectReader
         private SimConnectFlightConnector flightConnector;
         private ThrottlingLogic throttlingLogic;
         private PluginConfiguration pluginConfig;
-        private int previous = 0;
+        private Translator translator;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         public override async Task<bool> Start()
@@ -27,6 +27,7 @@ namespace ViLA.Extensions.SimConnectReader
             logger = LoggerFactory.CreateLogger<SimConnectSubscriberPlugin>();
             flightConnector = new SimConnectFlightConnector(LoggerFactory.CreateLogger<SimConnectFlightConnector>());
             throttlingLogic = new ThrottlingLogic(LoggerFactory.CreateLogger<ThrottlingLogic>());
+            translator = new Translator(LoggerFactory.CreateLogger<Translator>());
 
             try
             {
@@ -44,8 +45,18 @@ namespace ViLA.Extensions.SimConnectReader
             flightConnector.GenericValuesUpdated += FlightConnector_GenericValuesUpdated;
 
             RegisterConfiguredValues();
+            RegisterTriggerValues();
 
             return true;
+        }
+
+        private void RegisterTriggerValues()
+        {
+            logger.LogDebug($"Variables from profile config: " + string.Join(" ", Triggers));
+            var result = translator.convertFromString(Triggers);
+            logger.LogInformation($"Registering {result.Count} variable(s) from profile config");
+
+            flightConnector.RegisterSimValues(result.ToArray());
         }
 
         private void RegisterConfiguredValues()
@@ -53,10 +64,10 @@ namespace ViLA.Extensions.SimConnectReader
             if (pluginConfig == null || pluginConfig.ToggleValues == null)
                 return;
 
-            foreach(TOGGLE_VALUE value in pluginConfig.ToggleValues)
-            {
-                flightConnector.RegisterSimValue(value);
-            }
+            logger.LogDebug($"Variables from plugin config: " + string.Join(" ", pluginConfig.ToggleValues));
+            logger.LogInformation($"Registering {pluginConfig.ToggleValues.Length} variable(s) from plugin config");
+
+            flightConnector.RegisterSimValues(pluginConfig.ToggleValues);
         }
 
         public override async Task Stop()

@@ -418,7 +418,7 @@ namespace SimConnectReader.SimConnectFSX
             var changed = false;
             lock (lockLists)
             {
-                logger.LogInformation("Registering {values}", string.Join(", ", simValues));
+                logger.LogDebug("Registering {values}", string.Join(", ", simValues));
                 foreach (var simValue in simValues)
                 {
                     if (genericValues.ContainsKey(simValue))
@@ -469,7 +469,7 @@ namespace SimConnectReader.SimConnectFSX
             var changed = false;
             lock (lockLists)
             {
-                logger.LogInformation("De-Registering {values}", string.Join(", ", simValues));
+                logger.LogDebug("De-Registering {values}", string.Join(", ", simValues));
                 foreach (var simValue in simValues)
                 {
                     if (genericValues.ContainsKey(simValue))
