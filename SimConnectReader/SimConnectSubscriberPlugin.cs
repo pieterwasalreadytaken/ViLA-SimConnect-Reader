@@ -72,7 +72,7 @@ namespace ViLA.Extensions.SimConnectReader
 
         public override async Task Stop()
         {
-
+            flightConnector.CloseConnection();
         }
 
         private void FlightConnector_GenericValuesUpdated(object? sender, ToggleValueUpdatedEventArgs e)
@@ -80,7 +80,7 @@ namespace ViLA.Extensions.SimConnectReader
             foreach (KeyValuePair <TOGGLE_VALUE, double> entry in e.GenericValueStatus)
             {
                 var name = entry.Key.ToSimConnectString();
-                var value = (int)entry.Value;
+                var value = entry.Value;
                 Send(name, value);
             }
         }
