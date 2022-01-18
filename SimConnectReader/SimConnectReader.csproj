@@ -26,7 +26,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="manifest.json" />
       <Content Include="manifest.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
@@ -40,15 +39,23 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="SimConnect\Microsoft.FlightSimulator.SimConnect.dll">
+      <Resource Include="SimConnectReaderConfiguration\DefaultSampleConfig.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Microsoft.FlightSimulator.SimConnect.dll">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="SimConnect\SimConnect.dll">
+      <None Update="SimConnect.dll">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="SimConnectReaderConfiguration\DefaultSampleConfig.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
       <Exec Command="copy $(OutDir)\* $(ProjectDir)..\..\ViLA\ViLA\bin\Debug\net6.0\Plugins\SimConnectReader\" />
+      <Exec Command="copy $(OutDir)\SimConnectReaderConfiguration\*.json $(ProjectDir)..\..\ViLA\ViLA\bin\Debug\net6.0\Configuration\" />
     </Target>
 </Project>
