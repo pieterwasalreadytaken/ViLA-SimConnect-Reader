@@ -15,6 +15,7 @@ namespace SimConnectReader.SimConnectFSX
         public event EventHandler<AircraftStatusUpdatedEventArgs> AircraftStatusUpdated;
         public event EventHandler<ToggleValueUpdatedEventArgs> GenericValuesUpdated;
         public event EventHandler<InvalidEventRegisteredEventArgs> InvalidEventRegistered;
+        public event EventHandler<ConnectedEventArgs> Connected;
         public event EventHandler Closed;
 
         // Extra SimConnect functions via native pointer
@@ -74,15 +75,7 @@ namespace SimConnectReader.SimConnectFSX
                 return;
             }
 
-            try
-            {
-                simconnect = new SimConnect("ViLA SimConnect Plugin", IntPtr.Zero, WM_USER_SIMCONNECT, simConnectEventHandle, 0);
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e.Message);
-                return;
-            }
+            simconnect = new SimConnect("ViLA SimConnect Plugin", IntPtr.Zero, WM_USER_SIMCONNECT, simConnectEventHandle, 0);
 
             // Get direct access to the SimConnect handle, to use functions otherwise not supported.
             FieldInfo fiSimConnect = typeof(SimConnect).GetField("hSimConnect", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -321,6 +314,7 @@ namespace SimConnectReader.SimConnectFSX
         void Simconnect_OnRecvOpen(SimConnect sender, SIMCONNECT_RECV_OPEN data)
         {
             logger.LogInformation("Connected to Flight Simulator");
+            Connected?.Invoke(this, new ConnectedEventArgs(0));
 
             cts?.Cancel();
             cts = new CancellationTokenSource();
@@ -390,7 +384,7 @@ namespace SimConnectReader.SimConnectFSX
             // 0xC000014B: CTD
             // 0xC00000B0: Sim has exited or any generic SimConnect error
             // 0xC000014B: STATUS_PIPE_BROKEN
-            logger.LogError(exception, "Exception received");
+            logger.LogWarning(exception, "Exception received");
             CloseConnection();
             Closed?.Invoke(this, new EventArgs());
         }

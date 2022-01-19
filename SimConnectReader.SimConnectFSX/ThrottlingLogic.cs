@@ -8,15 +8,13 @@ namespace SimConnectReader.SimConnectFSX
     public class ThrottlingLogic
     {
         private const int MinMilliseconds = 2000;
-
+        private readonly SemaphoreSlim sm = new SemaphoreSlim(1);
         private readonly ILogger<ThrottlingLogic> logger;
 
         public ThrottlingLogic(ILogger<ThrottlingLogic> logger)
         {
             this.logger = logger;
         }
-
-        private readonly SemaphoreSlim sm = new SemaphoreSlim(1);
 
         public async Task RunAsync(Func<Task> action)
         {

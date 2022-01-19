@@ -8,6 +8,7 @@ namespace SimConnectReader.SimConnectFSX
         event EventHandler<AircraftStatusUpdatedEventArgs> AircraftStatusUpdated;
         event EventHandler<ToggleValueUpdatedEventArgs> GenericValuesUpdated;
         event EventHandler<InvalidEventRegisteredEventArgs> InvalidEventRegistered;
+        event EventHandler<ConnectedEventArgs> Connected;
 
         void RegisterSimValues(params TOGGLE_VALUE[] simValues);
         void RegisterSimValue(TOGGLE_VALUE simValue);
@@ -38,6 +39,16 @@ namespace SimConnectReader.SimConnectFSX
     public class InvalidEventRegisteredEventArgs : EventArgs
     {
         public InvalidEventRegisteredEventArgs(uint sendID)
+        {
+            SendID = sendID;
+        }
+
+        public uint SendID { get; }
+    }
+
+    public class ConnectedEventArgs : EventArgs
+    {
+        public ConnectedEventArgs(uint sendID)
         {
             SendID = sendID;
         }

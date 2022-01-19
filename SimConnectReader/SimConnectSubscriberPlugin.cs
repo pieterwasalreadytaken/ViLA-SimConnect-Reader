@@ -3,8 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SimConnectReader.SimConnectFSX;
-using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System;
 
 namespace ViLA.Extensions.SimConnectReader
 {
@@ -41,13 +42,55 @@ namespace ViLA.Extensions.SimConnectReader
             }
 
             logger.LogInformation("Starting SimConnect listener...");
-            flightConnector.Initialize();
-            flightConnector.GenericValuesUpdated += FlightConnector_GenericValuesUpdated;
 
-            RegisterConfiguredValues();
-            RegisterTriggerValues();
+            flightConnector.GenericValuesUpdated += FlightConnector_GenericValuesUpdated;
+            flightConnector.Closed += SimConnect_Closed;
+            flightConnector.Connected += SimConnect_Connected;
+
+            _ = InitializeSimConnectAsync(flightConnector);
 
             return true;
+        }
+
+        private void SimConnect_Connected(object? sender, ConnectedEventArgs e)
+        {
+            RegisterConfiguredValues();
+            RegisterTriggerValues();
+        }
+
+        private async Task InitializeSimConnectAsync(SimConnectFlightConnector simConnect)
+        {
+            while (true)
+            {
+                try
+                {
+                    simConnect.Initialize();
+                    simConnect.Send("Connected to ViLa plugin");
+                    break;
+                }
+                catch (COMException ex)
+                {
+                    logger.LogDebug(ex, "SimConnect error.");
+                    await Task.Delay(5000).ConfigureAwait(true);
+                }
+            }
+        }
+
+        private void SimConnect_Closed(object? sender, EventArgs e)
+        {
+            logger.LogDebug("SimConnect is closed.");
+            throttlingLogic.RunAsync(async () =>
+            {
+                logger.LogDebug("Start reconnecting...");
+                var simConnect = sender as SimConnectFlightConnector;
+
+                if (simConnect == null)
+                {
+                    return;
+                }
+
+                await InitializeSimConnectAsync(simConnect);
+            }).Forget();
         }
 
         private void RegisterTriggerValues()
