@@ -242,21 +242,77 @@
                         }
                     }
                 ],
-                "8":[
+                "11": [
                     {
-                        "color":"000000",
-                        "trigger":{
-                            "id":"ELECTRICAL MASTER BATTERY",
-                            "comparator":"EqualTo",
-                            "value": 0
+                        "color": "ff0000",
+                        "trigger": {
+                            "value": [
+                                {
+                                    "id": "TAILWHEEL LOCK ON",
+                                    "comparator": "NotEqualTo",
+                                    "value": 1
+                                },
+                                {
+                                    "id": "SIM ON GROUND",
+                                    "comparator": "NotEqualTo",
+                                    "value": 1
+                                },
+                                {
+                                    "id": "IS TAIL DRAGGER",
+                                    "comparator": "EqualTo",
+                                    "value": 1
+                                }
+                            ],
+                            "comparator": "And"
                         }
                     },
                     {
                         "color": "008000",
                         "trigger": {
-                            "id": "ELECTRICAL MASTER BATTERY",
+                            "value": [
+                                {
+                                    "id": "TAILWHEEL LOCK ON",
+                                    "comparator": "EqualTo",
+                                    "value": 1
+                                },
+                                {
+                                    "id": "IS TAIL DRAGGER",
+                                    "comparator": "EqualTo",
+                                    "value": 1
+                                }
+                            ],
+                            "comparator": "And"
+                        }
+                    },
+                    {
+                        "color": "808000",
+                        "trigger": {
+                            "value": [
+                                {
+                                    "id": "TAILWHEEL LOCK ON",
+                                    "comparator": "NotEqualTo",
+                                    "value": 1
+                                },
+                                {
+                                    "id": "SIM ON GROUND",
+                                    "comparator": "EqualTo",
+                                    "value": 1
+                                },
+                                {
+                                    "id": "IS TAIL DRAGGER",
+                                    "comparator": "EqualTo",
+                                    "value": 1
+                                }
+                            ],
+                            "comparator": "And"
+                        }
+                    },
+                    {
+                        "color": "000000",
+                        "trigger": {
+                            "id": "IS TAIL DRAGGER",
                             "comparator": "EqualTo",
-                            "value": 1
+                            "value": 0
                         }
                     }
                 ],
@@ -295,42 +351,15 @@
                         }
                     }
                 ],
-                "11": [
-                    {
-                        "color": "ff0000",
-                        "trigger": {
-                            "value": [
-                                {
-                                    "id": "FLAP SPEED EXCEEDED",
-                                    "comparator": "EqualTo",
-                                    "value": 1
-                                },
-                                {
-                                    "id": "FLAPS HANDLE INDEX",
-                                    "comparator": "GreaterThan",
-                                    "value": 0
-                                }
-                            ],
-                            "comparator": "And"
-                        }
-                    },
+                "8": [
                     {
                         "color": "008000",
                         "trigger": {
-                            "value": [
-                                {
-                                    "id": "FLAP SPEED EXCEEDED",
-                                    "comparator": "EqualTo",
-                                    "value": 0
-                                },
-                                {
-                                    "id": "FLAPS HANDLE INDEX",
-                                    "comparator": "GreaterThan",
-                                    "value": 0
-                                }
-                            ],
-                            "comparator": "And"
+                            "id": "FLAPS HANDLE INDEX",
+                            "comparator": "GreaterThan",
+                            "value": 0
                         }
+                        
                     },
                     {
                         "color": "000000",
