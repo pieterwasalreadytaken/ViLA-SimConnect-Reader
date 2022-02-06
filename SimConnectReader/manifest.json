@@ -1,5 +1,5 @@
 ﻿{
     "entrypoint": "SimConnectReader.dll",
     "version": "0.1.0",
-    "releases": "https://api.github.com/sn3akz/ViLA-SimConnect-Reader.git/releases"
+    "releases": "https://api.github.com/pieterwasalreadytaken/ViLA-SimConnect-Reader.git/releases"
 }
